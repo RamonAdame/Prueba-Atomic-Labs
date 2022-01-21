@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Main from '../src/page/Main';
+import Formulario from '../src/page/Formulario';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +13,13 @@ function Navigation() {
         <Stack.Screen 
         name="Main" 
         component={Main} 
+        options={{
+            headerShown : false
+        }}
+        />
+        <Stack.Screen 
+        name="Formulario" 
+        component={Formulario} 
         options={{
             headerShown : false
         }}

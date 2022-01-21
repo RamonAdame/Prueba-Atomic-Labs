@@ -2,7 +2,10 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import React from 'react';
 import { Button, Text } from 'react-native-paper';
 
-export default function Main() {
+export default function Main(props) {
+    const {navigation} = props;
+    console.log(navigation);
+
     return (
         <View style={[styles.container, {
             flexDirection: "column"
@@ -25,7 +28,7 @@ export default function Main() {
                     uppercase={false}
                     style={{ width: "75%" }} 
                     mode="contained" 
-                    onPress={() => console.log('Pressed')}>
+                    onPress={() => navigation.navigate('Formulario')}>
                     ¡Quiero ser parte!
                 </Button>
             </View>
