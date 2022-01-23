@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, ImageBackground } from 'react-native';
 import Navigation from './navigation/StackNavigation';
 import { Provider as PaperProvider } from 'react-native-paper';
 

@@ -1,49 +1,119 @@
-import React from 'react';
-import { View, StyleSheet, Image, ScrollView } from 'react-native';
-import { Button, Text, TextInput, Avatar } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, TextInput, Image, ImageBackground } from 'react-native';
+import { Button, Text, Avatar } from 'react-native-paper';
+import Bar from './ProgressBAr';
 
-const Formulario = () => {
+const Formulario = (props) => {
+    const { navigation } = props;
+    const { navigate } = navigation;
+    const [form, setForm] = useState({ name: null, lastName: null });
+    const [formErrorName, setFormErrorName] = useState({ name: false });
+    const [disabled, setDisabled] = useState(false);
+
+    useEffect(() => {
+        if ((form.lastName === null || form.lastName === "") || (form.name === null || form.name === "")) {
+            setDisabled(true)
+        } else {
+            setDisabled(false);
+        }
+    }, [form.lastName, form.name])
+
+    //PARA GUARDAR LOS DATOS EN EL ESTADO "FORM"
+    const setDatos = (e, type) => {
+        console.log(form)
+        let errors = {}
+        if (type === "name" && e.nativeEvent.text.length < 5) {
+            errors.name = true;
+            setForm({ ...form, [type]: null })
+        } else {
+            errors.name = false;
+            setForm({ ...form, [type]: e.nativeEvent.text })
+        }
+        setFormErrorName(errors)
+    }
+
+    const Send = () => {
+        navigate('ValidarCelular');
+    }
+
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <View style={styles.flex1} >
-                    <Text>Slide</Text>
+        <ImageBackground source={require('../assets/MaskGroup12x.png')}
+            style={{
+                height: "100%",
+                width: "100%", flex: 1
+            }}>
+            <ScrollView>
+                <View style={styles.container}>
+                    <View style={styles.flex1} >
+                        <Bar />
+                    </View>
+                    <View style={[styles.flex2, styles.flexRow]} >
+                        <View style={{ marginTop: 30, marginLeft: 30 }}>
+                            <Avatar.Image size={40} source={require('../assets/Group_40142x.png')} />
+                        </View>
+                        <View style={{ marginTop: 20, marginLeft: 50 }}>
+                            <Text style={[styles.white, {
+                                fontSize: 25,
+                                fontWeight: "bold"
+                            }]}>TE QUEREMOS
+                            </Text>
+                            <Text style={[styles.orange, {
+                                fontSize: 25,
+                                fontWeight: "bold"
+                            }]}>CONOCER</Text>
+                        </View>
+                    </View>
+                    <View style={styles.flex4} >
+                        <View style={styles.marginTopBottom}>
+                            <Text style={styles.fontSize_18, styles.white}>Queremos saber que eres tú, por favor ingresa los siguientes datos:</Text>
+                        </View>
+                        <View style={{ marginBottom: "5%" }}>
+                            <Text style={styles.fontSize_20, styles.white}>Nombre (s)</Text>
+                            <View style={[styles.setSection1,
+                            formErrorName.name && styles.borderRed]}>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    style={[styles.inputs]}
+                                    onChange={(e) => setDatos(e, "name")}
+                                />
+                                <Image
+                                    tintColor='gray'
+                                    style={styles.setIcon}
+                                    source={require('../assets/ic_lock_24px.png')} />
+                            </View>
+                            {formErrorName.name &&
+                                <Text style={styles.colorRed}>El nombre deberá tener mínimo 5 caracteres</Text>}
+                        </View>
+                        <View>
+                            <Text style={styles.fontSize_20, styles.white}>Apellidos</Text>
+                            <View style={styles.setSection2}>
+                                <TextInput
+                                    underlineColorAndroid="transparent"
+                                    style={[styles.inputs]}
+                                    onChange={(e) => setDatos(e, "lastName")}
+                                />
+                                <Image
+                                    tintColor='gray'
+                                    style={styles.setIcon}
+                                    source={require('../assets/ic_lock_24px.png')} />
+                            </View>
+                        </View>
+                    </View>
+                    <View style={[styles.flex1, styles.alingItemsCenter, styles.marginTop20P]} >
+                        <Button
+                            color="#FA4D09"
+                            labelStyle={{ fontSize: 18 }}
+                            uppercase={false}
+                            style={{ width: "60%", borderRadius: 20 }}
+                            mode="contained"
+                            disabled={disabled}
+                            onPress={() => Send()}>
+                            Enviar
+                        </Button>
+                    </View>
                 </View>
-                <View style={[styles.flex2, styles.flexRow]} >
-                    <View>
-                        <Avatar.Image source={require('../assets/Group_40142x.png')} />
-                    </View>
-                    <View>
-                        <Text>TE QUEREMOS
-                            <Text style={styles.orange}>CONOCER</Text>
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.flex4} >
-                    <View style={styles.marginTopBottom}>
-                        <Text>Queremos saber que eres tú, por favor ingresa los siguientes datos:</Text>
-                    </View>
-                    <View style={{ marginBottom: "8%" }}>
-                        <Text style={styles.fontSize_20}>Nombre (s)</Text>
-                        <TextInput />
-                    </View>
-                    <View>
-                        <Text style={styles.fontSize_20}>Apellidos</Text>
-                        <TextInput />
-                    </View>
-                </View>
-                <View style={[styles.flex1, styles.alingItemsCenter,styles.marginTop20P]} >
-                    <Button color="orange"
-                        labelStyle={{ fontSize: 18 }}
-                        uppercase={false}
-                        style={{ width: "75%", borderRadius: 20 }}
-                        mode="contained"
-                        onPress={() => console.log('Pressed')}>
-                        Enviar
-                    </Button>
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </ImageBackground>
     );
 };
 
@@ -53,7 +123,7 @@ const styles = StyleSheet.create({
         padding: 20,
         flexDirection: "column"
     },
-    alingItemsCenter:{
+    alingItemsCenter: {
         alignItems: 'center'
     },
     borderRadius20: {
@@ -62,17 +132,24 @@ const styles = StyleSheet.create({
     orange: {
         color: "#fa4d09"
     },
-    fontSize_20: {
-        fontSize: 20
+    white: {
+        color: "#fff"
+    },
+    fontSize_18: {
+        fontSize: 18
     },
     marginTopBottom: {
-        marginTop: 50,
-        marginBottom: 50
+        marginTop: 25,
+        marginBottom: 25
     },
     marginTop20P: {
         marginTop: "20%"
     },
-    widht75:{
+    inputs: {
+        height: 35,
+        width: "86%"
+    },
+    widht75: {
         width: "75%"
     },
     flex1: {
@@ -89,7 +166,37 @@ const styles = StyleSheet.create({
     },
     flexRow: {
         flexDirection: "row"
-    }
+    },
+    colorRed: {
+        color: 'red'
+    },
+    borderRed: {
+        borderColor: 'red'
+    },
+    setSection1: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        borderWidth: 0.5,
+        borderColor: '#000',
+        height: 40,
+        borderRadius: 5,
+        paddingLeft: 5
+    },
+    setSection2: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        borderWidth: 0.5,
+        borderColor: '#000',
+        height: 40,
+        borderRadius: 5,
+        paddingLeft: 5
+    },
+    setIcon: {
+        marginTop: 5,
+        height: 25,
+        width: 25,
+        resizeMode: 'stretch',
+    },
 });
 
 export default Formulario;
