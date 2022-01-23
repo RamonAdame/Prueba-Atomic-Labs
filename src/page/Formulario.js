@@ -20,7 +20,6 @@ const Formulario = (props) => {
 
     //PARA GUARDAR LOS DATOS EN EL ESTADO "FORM"
     const setDatos = (e, type) => {
-        console.log(form)
         let errors = {}
         if (type === "name" && e.nativeEvent.text.length < 5) {
             errors.name = true;
@@ -32,8 +31,13 @@ const Formulario = (props) => {
         setFormErrorName(errors)
     }
 
-    const Send = () => {
-        navigate('ValidarCelular');
+    //PARA ENVIAR LOS DATOS COMO PARAMETROS AL PAGE DE CELULAR
+    const Send = async () => {
+        navigate('ValidarCelular', {
+            nombre: form.name,
+            apellidos: form.lastName
+        });
+        setForm({ name: null, lastName: null })
     }
 
     return (
@@ -75,6 +79,7 @@ const Formulario = (props) => {
                                     underlineColorAndroid="transparent"
                                     style={[styles.inputs]}
                                     onChange={(e) => setDatos(e, "name")}
+                                    value={form.name}
                                 />
                                 <Image
                                     tintColor='gray'
@@ -91,6 +96,7 @@ const Formulario = (props) => {
                                     underlineColorAndroid="transparent"
                                     style={[styles.inputs]}
                                     onChange={(e) => setDatos(e, "lastName")}
+                                    value={form.lastName}
                                 />
                                 <Image
                                     tintColor='gray'
@@ -99,7 +105,8 @@ const Formulario = (props) => {
                             </View>
                         </View>
                     </View>
-                    <View style={[styles.flex1, styles.alingItemsCenter, styles.marginTop20P]} >
+                    <View style={[styles.flex1,
+                         styles.alingItemsCenter, styles.marginTop20P]} >
                         <Button
                             color="#FA4D09"
                             labelStyle={{ fontSize: 18 }}
@@ -110,6 +117,11 @@ const Formulario = (props) => {
                             onPress={() => Send()}>
                             Enviar
                         </Button>
+                    </View>
+                    <View style={{ flex: 1, alignItems: 'center' }}>
+                        <Image
+                            style={styles.astronaut}
+                            source={require('../assets/Group4033.png')} />
                     </View>
                 </View>
             </ScrollView>
@@ -143,7 +155,7 @@ const styles = StyleSheet.create({
         marginBottom: 25
     },
     marginTop20P: {
-        marginTop: "20%"
+        marginTop: 40
     },
     inputs: {
         height: 35,
@@ -195,6 +207,12 @@ const styles = StyleSheet.create({
         marginTop: 5,
         height: 25,
         width: 25,
+        resizeMode: 'stretch',
+    },
+    astronaut: {
+        marginVertical: 5,
+        height: 350,
+        width: 350,
         resizeMode: 'stretch',
     },
 });

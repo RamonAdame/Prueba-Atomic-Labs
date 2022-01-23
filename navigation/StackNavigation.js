@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Main from '../src/page/Main';
 import Formulario from '../src/page/Formulario';
 import ValidarCelular from '../src/page/ValidarCelular';
+import Final from '../src/page/Final'
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,13 @@ function Navigation() {
         <Stack.Screen
           name="ValidarCelular"
           component={ValidarCelular}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Final"
+          component={Final}
           options={{
             headerShown: false
           }}
